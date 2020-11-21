@@ -1,12 +1,15 @@
 import React from "react";
+import RepositoryTile from "./RepositoryTile.js";
+import OfflineData from "./OfflineData";
 
 class App extends React.Component{
   constructor(){
     super();
     this.state={
-      DataFromApi:{},
+      DataFromApi:OfflineData,
       IsLoading:true
     };
+    this.RepositoryTiles=this.state.DataFromApi.map(item=><RepositoryTile details={item}/>);
   }
   componentDidMount(){
     fetch("https://api.wheretheiss.at/v1/satellites/25544").then(response=>response.json())
@@ -21,7 +24,11 @@ class App extends React.Component{
       return (<h1>Loading...</h1>);
     }
     //If data is fetching is successfull below code will be rendered
-    return (<h1>Hi</h1>);
+    return (
+      <div>
+        {this.RepositoryTiles}
+      </div>
+    );
   }
 }
 export default App;

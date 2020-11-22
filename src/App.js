@@ -12,12 +12,14 @@ class App extends React.Component{
       DataLoadingSuccessfull:true,
       OpenedId:""
     };
-    //RepositoryTiles is an array of tiles that will be displayed on the screen.
-
     this.reRender=this.reRender.bind(this);
   }
+
+  //Below code will re render all the tiles as closed when some element in children is clicked
+  //This function is passed to every child in it's props.
   reRender(id){
     console.log("Clicked with id: ",id);
+    //This basically changes the OpenedId i.e. the id that must remain open among all the tiles
     this.setState((prevState)=>{
       return{
         DataFromApi:prevState.DataFromApi,
@@ -27,6 +29,8 @@ class App extends React.Component{
       };
     });
   }
+
+
   componentDidMount(){
     //Sending request to API
     /*fetch("/OfflineData.js").then(response=>{
@@ -50,11 +54,18 @@ class App extends React.Component{
 
 
   render(){
+
+    //This will be rendered if error is encounterd while fetching data.
+    if(!this.state.DataLoadingSuccessfull){
+      return  (<h1>Failed to fetch data try Again</h1>)
+    }
     //This code will be rendered while the fetching is in going on.
     if(this.state.IsLoading){
       return (<h1>Loading...</h1>);
     }
     //If data is fetching is successfull below code will be rendered
+    //RepositoryTiles is calculated everytime rendring is done with a new OpenedId
+    //It is then passed to render.
     var RepositoryTiles=this.state.DataFromApi.map(item=>{
       item.fun=this.reRender;
       item.IsOpened=(item.name === this.state.OpenedId)?true:false;

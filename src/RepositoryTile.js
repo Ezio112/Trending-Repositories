@@ -11,18 +11,23 @@ class RepositoryTile extends React.Component{
     this.toggle=this.toggle.bind(this);
   }
 
-  //This function toggles the state of the collapsed element.
-  toggle(){
-    this.setState(prevState=>{return{IsOpen:!prevState.IsOpen}});
+  //On click it sends the id of clicked element to reRender Element in parent class;
+  ClickHandler(){
     const fx=this.props.details.fun;
     fx(this.props.details.name);
   }
-
-  static getDerivedStateFromProps(props,state){
-    return  {canShow:props.IsOpened};
+  //Since Only props were beign updated during reRendring of RepositoryTiles states of childs were not being update
+  //Hence lifecycle method was called to update on every update of props
+  static getDerivedStateFromProps(props,state) {
+    if(props.details.IsOpened === state.IsOpen){
+      return {IsOpen:false};
+    }
+    return {IsOpen:props.details.IsOpened}
   }
+
+  //It finally return the tile to be displayed
+  //Some of small style are added inline while othres were kept in index.css
   render(){
-    console.log(this.state.IsOpen,this.props.details.IsOpened);
     return(
       <div className="container-lg">
         <button type="button" className="collapsible" onClick={this.toggle}>
@@ -31,7 +36,7 @@ class RepositoryTile extends React.Component{
           <h3>{this.props.details.name}</h3>
         </button>
 
-        <Collapse isOpen={this.props.details.IsOpened && this.state.IsOpen}>
+        <Collapse isOpen={this.state.IsOpen}>
           <div className="content">
             <p style={{color:"grey",paddingLeft:"100px"}}>{this.props.details.description}</p>
             <br></br>

@@ -8,18 +8,30 @@ class App extends React.Component{
     super();
     this.state={
       DataFromApi:OfflineData,
-      IsLoading:true,
-      DataLoadingSuccessfull:true
+      IsLoading:false,
+      DataLoadingSuccessfull:true,
+      OpenedId:""
     };
     //RepositoryTiles is an array of tiles that will be displayed on the screen.
-    this.RepositoryTiles=this.state.DataFromApi.map(item=><RepositoryTile details={item}/>);
-  }
 
+    this.reRender=this.reRender.bind(this);
+  }
+  reRender(id){
+    console.log("Clicked with id: ",id);
+    this.setState((prevState)=>{
+      return{
+        DataFromApi:prevState.DataFromApi,
+        IsLoading:prevState.IsLoading,
+        DataLoadingSuccessfull:prevState.DataLoadingSuccessfull,
+        OpenedId:id
+      };
+    });
+  }
   componentDidMount(){
     //Sending request to API
-    fetch("https://api.wheretheiss.at/v1/satellites/25544").then(response=>{
+    /*fetch("/OfflineData.js").then(response=>{
       if(!response.ok){
-        this.setState(prevState=>{return{DataFromApi:prevState.DataFromApi,IsLoading:prevState.IsLoading,DataLoadingSuccessfull:false}});
+        this.setState(prevState=>{return{DataFromApi:prevState.DataFromApi,IsLoading:prevState.IsLoading,DataLoadingSuccessfull:false,OpenedId:prevState.OpenedId}});
       }
       else
         return response.json()
@@ -27,12 +39,13 @@ class App extends React.Component{
     .then(data=>{
       this.setState(prevState=>{
         //As soon as the data is loaded it is stored in state.DataFromApi
+        //console.log(data);
         return {DataFromApi:data,IsLoading:false,DataLoadingSuccessfull:true};
       });//Closing of setState function
     })//closing of promise
     .catch(error =>{
-      this.setState(prevState=>{return{DataFromApi:prevState.DataFromApi,IsLoading:prevState.IsLoading,DataLoadingSuccessfull:false}});
-    });//Closing of catch statement
+      this.setState(prevState=>{return{DataFromApi:prevState.DataFromApi,IsLoading:prevState.IsLoading,DataLoadingSuccessfull:false,OpenedId:prevState.OpenedId}});
+    });//Closing of catch statement*/
   }
 
 
@@ -42,9 +55,14 @@ class App extends React.Component{
       return (<h1>Loading...</h1>);
     }
     //If data is fetching is successfull below code will be rendered
+    var RepositoryTiles=this.state.DataFromApi.map(item=>{
+      item.fun=this.reRender;
+      item.IsOpened=(item.name === this.state.OpenedId)?true:false;
+      return <RepositoryTile details={item}/>});
+
     return (
       <div className="container">
-        {this.RepositoryTiles}
+        {RepositoryTiles}
       </div>
     );
   }

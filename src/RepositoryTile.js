@@ -6,18 +6,23 @@ class RepositoryTile extends React.Component{
   constructor(){
     super();
     this.state={
-      IsOpen:false
-    };
+      IsOpen:false,
+    }
     this.toggle=this.toggle.bind(this);
   }
+
   //This function toggles the state of the collapsed element.
   toggle(){
-    console.log("A tile was Clicked!");
-    this.setState(prevState=> {return {IsOpen:!prevState.IsOpen}});
+    this.setState(prevState=>{return{IsOpen:!prevState.IsOpen}});
+    const fx=this.props.details.fun;
+    fx(this.props.details.name);
   }
 
-
+  static getDerivedStateFromProps(props,state){
+    return  {canShow:props.IsOpened};
+  }
   render(){
+    console.log(this.state.IsOpen,this.props.details.IsOpened);
     return(
       <div className="container-lg">
         <button type="button" className="collapsible" onClick={this.toggle}>
@@ -26,7 +31,7 @@ class RepositoryTile extends React.Component{
           <h3>{this.props.details.name}</h3>
         </button>
 
-        <Collapse isOpen={this.state.IsOpen}>
+        <Collapse isOpen={this.props.details.IsOpened && this.state.IsOpen}>
           <div className="content">
             <p style={{color:"grey",paddingLeft:"100px"}}>{this.props.details.description}</p>
             <br></br>

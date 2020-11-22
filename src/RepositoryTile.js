@@ -8,7 +8,7 @@ class RepositoryTile extends React.Component{
     this.state={
       IsOpen:false,
     }
-    this.toggle=this.toggle.bind(this);
+    this.ClickHandler=this.ClickHandler.bind(this);
   }
 
   //On click it sends the id of clicked element to reRender Element in parent class;
@@ -30,7 +30,7 @@ class RepositoryTile extends React.Component{
   render(){
     return(
       <div className="container-lg">
-        <button type="button" className="collapsible" onClick={this.toggle}>
+        <button type="button" className="collapsible" onClick={this.ClickHandler}>
           <img src={this.props.details.avatar} className="icon"/>
           <p style={{color:"grey"}}>{this.props.details.author}</p>
           <h3>{this.props.details.name}</h3>

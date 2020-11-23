@@ -33,7 +33,7 @@ class App extends React.Component{
 
   componentDidMount(){
     //Sending request to API
-    /*fetch("/OfflineData.js").then(response=>{
+    fetch("https://private-anon-21de9d8636-githubtrendingapi.apiary-mock.com/repositories").then(response=>{
       if(!response.ok){
         this.setState(prevState=>{return{DataFromApi:prevState.DataFromApi,IsLoading:prevState.IsLoading,DataLoadingSuccessfull:false,OpenedId:prevState.OpenedId}});
       }
